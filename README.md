@@ -1,5 +1,18 @@
 # Temporal Based MCP
-This is a demo to test MCP tools powered by Temporal.
+This is a demo to test durable & reliable MCP tools with Temporal.
+
+## Setup
+### Clone repo
+```bash
+git clone https://github.com/thinker-chetan/mcp-wt-temporal
+```
+### Install dependencies
+
+```bash
+uv sync
+```
+
+## Use
 
 ### Run Temporal Server, UI (via docker)
 ```docker
