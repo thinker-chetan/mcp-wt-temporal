@@ -1,0 +1,11 @@
+[project]
+name = "mcp-wt-temporal"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=2.13.0.2",
+    "temporalio>=1.18.2",
+    "uuid>=1.30",
+]
