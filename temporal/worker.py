@@ -24,6 +24,7 @@ async def main():
             complete_invoice_activity,
         ],
     )
+    print("Worker started for invoice processing...")
     await worker.run()
 
 
