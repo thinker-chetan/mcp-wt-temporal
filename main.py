@@ -5,10 +5,19 @@ from temporal.data import InvoiceData, Status
 
 mcp = FastMCP("temporal-based-mcp")
 
+_client: Client | None = None
+
+
+async def get_client() -> Client:
+    global _client
+    if _client is None:
+        _client = await Client.connect("temporal://localhost:7233")
+    return _client
+
 
 @mcp.tool
 async def process_invoice(data: InvoiceData):
-    client = await Client.connect("temporal://localhost:7233")
+    client = await get_client()
     handle = await client.start_workflow(
         "InvoiceProcessingWorkflow",
         data,
@@ -20,7 +29,7 @@ async def process_invoice(data: InvoiceData):
 
 @mcp.tool
 async def change_status(workflow_id: str, status: Status):
-    client = await Client.connect("temporal://localhost:7233")
+    client = await get_client()
     handle = client.get_workflow_handle(workflow_id)
     await handle.signal("change_status", status.value)
     return {"workflow_id": workflow_id, "status": status.value}
@@ -28,7 +37,7 @@ async def change_status(workflow_id: str, status: Status):
 
 @mcp.tool
 async def check_status(workflow_id: str):
-    client = await Client.connect("temporal://localhost:7233")
+    client = await get_client()
     handle = client.get_workflow_handle(workflow_id)
     status = await handle.query("check_status")
     return {"workflow_id": workflow_id, "status": status}
@@ -36,7 +45,7 @@ async def check_status(workflow_id: str):
 
 @mcp.tool
 async def check_workflow_status(workflow_id: str):
-    client = await Client.connect("temporal://localhost:7233")
+    client = await get_client()
     handle = client.get_workflow_handle(workflow_id)
     description = await handle.describe()
     return {
